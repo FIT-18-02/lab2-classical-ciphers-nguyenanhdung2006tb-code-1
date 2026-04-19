@@ -32,6 +32,9 @@
 ```bash
 g++ -std=c++17 -O2 -o caesar src/caesar.cpp
 ./caesar
+```
 ### Rail Fence Cipher
+```bash
 g++ -std=c++17 -O2 -o rail_fence src/rail_fence.cpp
 ./rail_fence
+```
