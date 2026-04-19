@@ -23,7 +23,6 @@ string rail_fence_encrypt(const string &plaintext, int rails) {
     int direction = 1;
 
     for (char c : plaintext) {
-        // TODO(student): Q6 can keep spaces as normal characters.
         fence[rail] += c;
         rail += direction;
         if (rail == rails - 1 || rail == 0) direction = -direction;
@@ -35,8 +34,41 @@ string rail_fence_encrypt(const string &plaintext, int rails) {
 }
 
 string rail_fence_decrypt(const string &ciphertext, int rails) {
-    // TODO(student): Q5
-    return ciphertext;
+    if (rails <= 1 || ciphertext.empty()) return ciphertext;
+
+    // Bước 1: Tạo một ma trận ảo chứa các ký tự '\n'
+    vector<vector<char>> fence(rails, vector<char>(ciphertext.length(), '\n'));
+
+    // Bước 2: Đánh dấu lộ trình ziczac bằng dấu '*'
+    int rail = 0;
+    int direction = 1;
+    for (size_t i = 0; i < ciphertext.length(); i++) {
+        fence[rail][i] = '*';
+        rail += direction;
+        if (rail == rails - 1 || rail == 0) direction = -direction;
+    }
+
+    // Bước 3: Rải các ký tự của bản mã vào các vị trí đã đánh dấu '*'
+    size_t index = 0;
+    for (int i = 0; i < rails; i++) {
+        for (size_t j = 0; j < ciphertext.length(); j++) {
+            if (fence[i][j] == '*' && index < ciphertext.length()) {
+                fence[i][j] = ciphertext[index++];
+            }
+        }
+    }
+
+    // Bước 4: Đọc lại theo đường ziczac để lấy bản rõ
+    string plaintext;
+    rail = 0;
+    direction = 1;
+    for (size_t i = 0; i < ciphertext.length(); i++) {
+        plaintext += fence[rail][i];
+        rail += direction;
+        if (rail == rails - 1 || rail == 0) direction = -direction;
+    }
+
+    return plaintext;
 }
 
 string read_message_from_file(const string &path) {
